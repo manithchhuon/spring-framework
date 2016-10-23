@@ -60,7 +60,8 @@ public class SpringValidatorAdapterTests {
 		messageSource.addMessage("Size", Locale.ENGLISH, "Size of {0} is must be between {2} and {1}");
 		messageSource.addMessage("Same", Locale.ENGLISH, "{2} must be same value with {1}");
 		messageSource.addMessage("password", Locale.ENGLISH, "Password");
-		messageSource.addMessage("confirmPassword", Locale.ENGLISH, "Password(Confirm)");
+		messageSource.addMessage("testBean.password", Locale.ENGLISH, "New Password");
+		messageSource.addMessage("confirmPassword", Locale.ENGLISH, "New Password(Confirm)");
 	}
 
 
@@ -75,7 +76,7 @@ public class SpringValidatorAdapterTests {
 
 		assertThat(errors.getFieldErrorCount("password"), is(1));
 		assertThat(messageSource.getMessage(errors.getFieldError("password"), Locale.ENGLISH),
-				is("Password must be same value with Password(Confirm)"));
+				is("New Password must be same value with New Password(Confirm)"));
 
 	}
 
@@ -105,7 +106,7 @@ public class SpringValidatorAdapterTests {
 
 		assertThat(errors.getFieldErrorCount("password"), is(1));
 		assertThat(messageSource.getMessage(errors.getFieldError("password"), Locale.ENGLISH),
-				is("Size of Password is must be between 8 and 128"));
+				is("Size of New Password is must be between 8 and 128"));
 
 	}
 

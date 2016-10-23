@@ -48,6 +48,7 @@ import org.springframework.validation.SmartValidator;
  * {@link CustomValidatorBean} and {@link LocalValidatorFactoryBean}.
  *
  * @author Juergen Hoeller
+ * @author Kazuki Shimizu
  * @since 3.0
  */
 public class SpringValidatorAdapter implements SmartValidator, javax.validation.Validator {
@@ -215,7 +216,7 @@ public class SpringValidatorAdapter implements SmartValidator, javax.validation.
 			Object attributeValue = entry.getValue();
 			if (!internalAnnotationAttributes.contains(attributeName)) {
 				if (attributeValue instanceof String) {
-					attributeValue = new ResolvableAttribute(attributeValue.toString());
+					attributeValue = new ResolvableAttribute(objectName, attributeValue.toString());
 				}
 				attributesToExpose.put(attributeName, attributeValue);
 			}
@@ -314,15 +315,18 @@ public class SpringValidatorAdapter implements SmartValidator, javax.validation.
 	@SuppressWarnings("serial")
 	private static class ResolvableAttribute implements MessageSourceResolvable, Serializable {
 
+		private final String objectName;
 		private final String resolvableString;
 
-		public ResolvableAttribute(String resolvableString) {
+		public ResolvableAttribute(String objectName, String resolvableString) {
+			this.objectName = objectName;
 			this.resolvableString = resolvableString;
 		}
 
 		@Override
 		public String[] getCodes() {
-			return new String[] {this.resolvableString};
+			return new String[] {objectName + Errors.NESTED_PATH_SEPARATOR + this.resolvableString,
+					this.resolvableString};
 		}
 
 		@Override
